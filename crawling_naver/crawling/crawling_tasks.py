@@ -9,8 +9,6 @@ import csv
 import re 
 
 
-url ='https://m.search.naver.com/search.naver?where=m_realtime&query=%EB%B9%A8%EB%9E%98%EB%B0%A9&sm=mtb_opt&section=0&best=0&nso=so%3Ar%2Cp%3A1h' #naver 실시간 키워드 검색['빨래방']
-res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
 
 # #DB
 # conn = sqlite3.connect("db.sqlite3")
@@ -19,7 +17,11 @@ res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
 # conn.execute(query)
 
 @background # add
-def task_crawling_naver(schedule=10, repeat=3600): #Schedule->start from now on, repeat->timeset(sec) 
+
+def task_crawling_naver(schedule=2, repeat=3600): #Schedule->start from now on, repeat->timeset(sec) 
+    url ='https://m.search.naver.com/search.naver?where=m_realtime&query=%EB%B9%A8%EB%9E%98%EB%B0%A9&sm=mtb_opt&section=0&best=0&nso=so%3Ar%2Cp%3A1h' #naver 실시간 키워드 검색['빨래방']
+    res = requests.get(url, headers={"User-Agent": "Mozilla/5.0"})
+
     if res.status_code == 200:
         soup = BeautifulSoup(res.content, 'html.parser')
         links = soup.find_all('div', class_='desc_txt') #본문class
@@ -38,11 +40,12 @@ def task_crawling_naver(schedule=10, repeat=3600): #Schedule->start from now on,
     print('task_crawling_naver : ', type(links), len(links), time_str)
 
 
-url1 ='https://m.search.naver.com/search.naver?where=m_realtime&query=%EC%84%B8%ED%83%81%EB%B0%A9&sm=mtb_opt&section=0&best=0&nso=so%3Ar%2Cp%3A1h' #naver 리얼타임 키워드 검색['세탁방']
-res1 = requests.get(url1, headers={"User-Agent": "Mozilla/5.0"})
+
 
 @background # add
 def task_crawling_naver2(schedule=10, repeat=3600): #Schedule->start from now on, repeat->timeset(sec) 
+    url1 ='https://m.search.naver.com/search.naver?where=m_realtime&query=%EC%84%B8%ED%83%81%EB%B0%A9&sm=mtb_opt&section=0&best=0&nso=so%3Ar%2Cp%3A1h' #naver 리얼타임 키워드 검색['세탁방']
+    res1 = requests.get(url1, headers={"User-Agent": "Mozilla/5.0"})
     if res1.status_code == 200:
         soup = BeautifulSoup(res1.content, 'html.parser')
         links = soup.find_all('div', class_='desc_txt') #본문class
