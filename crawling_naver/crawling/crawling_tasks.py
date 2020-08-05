@@ -37,3 +37,25 @@ def task_crawling_naver(schedule=10, repeat=3600): #Schedule->start from now on,
    
     print('task_crawling_naver : ', type(links), len(links), time_str)
 
+
+url1 ='https://m.search.naver.com/search.naver?where=m_realtime&query=%EC%84%B8%ED%83%81%EB%B0%A9&sm=mtb_opt&section=0&best=0&nso=so%3Ar%2Cp%3A1h' #naver 리얼타임 키워드 검색['세탁방']
+res1 = requests.get(url1, headers={"User-Agent": "Mozilla/5.0"})
+
+@background # add
+def task_crawling_naver2(schedule=10, repeat=3600): #Schedule->start from now on, repeat->timeset(sec) 
+    if res1.status_code == 200:
+        soup = BeautifulSoup(res1.content, 'html.parser')
+        links = soup.find_all('div', class_='desc_txt') #본문class
+        with sqlite3.connect("db.sqlite3") as con:
+            cur = con.cursor()
+            text = ''
+            for link in links:
+             text = str.strip(link.get_text())    
+              #   print(text)    
+             cur.execute("INSERT INTO coin (text) VALUES (?)",(text,)) #단일 데이터 삽입할 경우 ,로 구분자 설정
+             con.commit()
+             print('laundryshop  : ', type(links), len(links))
+    time_tuple = time.localtime()
+    time_str = time.strftime("%m/%d/%Y, %H:%M:%S", time_tuple)
+   
+    print('task_crawling_naver2 : ', type(links), len(links), time_str)

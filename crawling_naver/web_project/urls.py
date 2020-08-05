@@ -15,10 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from crawling.crawling_tasks import task_crawling_naver #빨래방 키워드
+from crawling.crawling_tasks import task_crawling_naver, task_crawling_naver2  #빨래방,세탁방 키워드
 
 task_crawling_naver(schedule=10, repeat=3600) #실질적 time-set | delect from background_task &~completedtask (check)
-
+task_crawling_naver2(schedule=10, repeat=3600)
 urlpatterns = [
     path('admin/', admin.site.urls),
 ]
